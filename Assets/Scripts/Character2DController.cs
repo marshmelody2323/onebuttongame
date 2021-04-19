@@ -9,7 +9,9 @@ public class Character2DController : MonoBehaviour
     public float timeforInput = 0.25f;
     public float inputTime = 0.0f;
     public int timesPressed = 0;
+    public int numberOfClicks = 0;
     public float MovementSpeed = 1;
+    public int coinValue = 1;
     // Start is called before the first frame update
     private void Start()
     {
@@ -51,10 +53,22 @@ public class Character2DController : MonoBehaviour
             {
                 if (timesPressed == 2)
                     movingRight = !movingRight;
-       
-                timesPressed = 0;
+
+                GetComponent<SpriteRenderer>().flipX = false;
+                numberOfClicks++;
+               
                 inputCheck = false;
 
+                if (numberOfClicks % 1 == 0)
+                {
+                   movingRight = !movingRight;
+                }
+
+                if (numberOfClicks % 2 == 0)
+                {
+                    GetComponent<SpriteRenderer>().flipX = true;
+                   
+                }
             }
         }
     }

@@ -10,6 +10,7 @@ public class EnemyScript : MonoBehaviour
 {
 
     public int power;
+    public Animator animator;
 
     ////public class PlayerController : MonoBehaviour
     ////{
@@ -39,11 +40,21 @@ public class EnemyScript : MonoBehaviour
     {
         if (isGrounded)
         {
-
+            animator.SetBool("Grounded", true);
             rb.AddForce(jump * jumpForce, ForceMode2D.Impulse);
             isGrounded = false;
         }
+
+        if (isGrounded == false)
+        {
+           animator.SetBool("Grounded", false);
+        }
+
     }
+
+
+        
+       
 
 
     void OnCollisionEnter2D(Collision2D col)
