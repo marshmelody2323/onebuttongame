@@ -12,6 +12,13 @@ public class Character2DController : MonoBehaviour
     public int numberOfClicks = 0;
     public float MovementSpeed = 1;
     public int coinValue = 1;
+    Vector3 checkPos;
+    private float secondsHeld;
+    public bool stopMoving;
+
+    public LayerMask wallsMask;
+
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -24,19 +31,25 @@ public class Character2DController : MonoBehaviour
         //var movement = Input.GetAxis("Horizontal");
         //transform.position += new Vector3(movement, 0, 0) * Time.deltaTime * MovementSpeed;
 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            secondsHeld = 0;
+            stopMoving = false;
+        }
         if (Input.GetKey(KeyCode.Space))
         {
             //nothing here
+            secondsHeld += Time.deltaTime;
+            if (secondsHeld > 0.25f)
+            {
+                stopMoving = true;
+            }
         }
         else
         {
-            if (movingRight)
-            { 
-                transform.Translate(Vector2.right * Time.deltaTime * MovementSpeed); 
-            }
-            else if (!movingRight)
+            if (!stopMoving)
             {
-                transform.Translate(Vector2.left * Time.deltaTime * MovementSpeed);
+                DecideMoveDirection();
             }
         }
         if (Input.GetKeyDown(KeyCode.Space))
@@ -52,25 +65,46 @@ public class Character2DController : MonoBehaviour
             if (inputTime > timeforInput)
             {
                 if (timesPressed == 2)
+                {
                     movingRight = !movingRight;
-
-                GetComponent<SpriteRenderer>().flipX = false;
-                numberOfClicks++;
+                    GetComponent<SpriteRenderer>().flipX = !movingRight;
+                }
                
                 inputCheck = false;
-
-                if (numberOfClicks % 1 == 0)
-                {
-                   movingRight = !movingRight;
-                }
-
-                if (numberOfClicks % 2 == 0)
-                {
-                    GetComponent<SpriteRenderer>().flipX = true;
-                   
-                }
+                timesPressed = 0;
+               
             }
         }
     }
+
+    void DecideMoveDirection()
+    {
+        if (movingRight)
+        {
+            //check right
+            Vector2 checkPoint = transform.position + Vector3.right;
+            if (Physics2D.OverlapPoint(checkPoint, wallsMask))
+            {
+                movingRight = !movingRight;
+                GetComponent<SpriteRenderer>().flipX = !movingRight;
+            }
+            checkPos = transform.position + Vector3.right;
+            Debug.DrawLine(transform.position, checkPos);
+            transform.Translate(Vector2.right * Time.deltaTime * MovementSpeed);
+        }
+        else if (!movingRight)
+        {
+            Vector2 checkPoint = transform.position + Vector3.left;
+            if (Physics2D.OverlapPoint(checkPoint, wallsMask))
+            {
+                movingRight = !movingRight;
+                GetComponent<SpriteRenderer>().flipX = !movingRight;
+            }
+            checkPos = transform.position + Vector3.left;
+            Debug.DrawLine(transform.position, checkPos);
+            transform.Translate(Vector2.left * Time.deltaTime * MovementSpeed);
+        }
+    }
+
 
 }

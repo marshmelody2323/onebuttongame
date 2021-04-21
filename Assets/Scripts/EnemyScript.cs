@@ -20,6 +20,9 @@ public class EnemyScript : MonoBehaviour
 
     public bool isGrounded;
     Rigidbody2D rb;
+
+    Vector3 checkPos;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -28,7 +31,12 @@ public class EnemyScript : MonoBehaviour
 
     void OnCollisionStay2D()
     {
-        isGrounded = true;
+        //isGrounded = true;
+        Vector2 checkPoint = transform.position + Vector3.down;
+        if (Physics2D.OverlapPoint(checkPoint))
+        {
+            isGrounded = true;
+        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -38,23 +46,30 @@ public class EnemyScript : MonoBehaviour
 
     void Update()
     {
+        checkPos = transform.position + Vector3.down;
+        Debug.DrawLine(transform.position, checkPos);
+
         if (isGrounded)
         {
-            animator.SetBool("Grounded", true);
+            animator.SetTrigger("HitGround");
             rb.AddForce(jump * jumpForce, ForceMode2D.Impulse);
             isGrounded = false;
+            Invoke("DelayTrigger", 1.0f);
         }
 
-        if (isGrounded == false)
-        {
-           animator.SetBool("Grounded", false);
-        }
+        //if (isGrounded == false)
+        //{
+        //    animator.SetTrigger("NotOnGround");
+        //}
 
     }
 
+    void DelayTrigger()
+    {
+        animator.SetTrigger("NotOnGround");
+    }
 
-        
-       
+
 
 
     void OnCollisionEnter2D(Collision2D col)
