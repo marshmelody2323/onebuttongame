@@ -7,7 +7,7 @@ public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager instance;
     public TextMeshProUGUI text;
-    int score;
+    static public int score;
 
 
 
@@ -19,6 +19,9 @@ public class ScoreManager : MonoBehaviour
         {
             instance = this;
         }
+        ChangeScore(0);
+
+
     }
 
     public void ChangeScore(int coinValue)

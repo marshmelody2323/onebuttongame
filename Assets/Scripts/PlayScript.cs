@@ -9,7 +9,7 @@ public class PlayScript : MonoBehaviour
 
     public void PlayGame()
     {
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(3);
     }
 
     public void HowToPlay()
@@ -20,6 +20,11 @@ public class PlayScript : MonoBehaviour
     public void MainMenuStart()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void OptionsMenu()
+    {
+        SceneManager.LoadScene(2);
     }
     void OnTriggerStay2D(Collider2D other)
     {
